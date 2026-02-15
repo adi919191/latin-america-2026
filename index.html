@@ -22,6 +22,11 @@
             border-color: #4ade80;
             color: #4ade80;
         }
+        
+        /* Dodatkowy styl do płynnego pokazywania pogody */
+        .weather-panel {
+            transition: opacity 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -74,7 +79,35 @@
     <section class="max-w-5xl mx-auto py-12 px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
             <h2 class="text-2xl font-bold mb-4">Clima Actual (Pogoda)</h2>
-            <a class="weatherwidget-io" href="https://forecast7.com/es/9d93n84d10/costa-rica/" data-label_1="KOSTARYKA" data-label_2="Pogoda na żywo" data-theme="pure" >KOSTARYKA Pogoda na żywo</a>
+            
+            <div class="flex flex-wrap gap-2 mb-4">
+                <button onclick="showWeather('lapaz', this)" class="w-btn bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold transition-all border border-transparent">La Paz 🇧🇴</button>
+                <button onclick="showWeather('ushuaia', this)" class="w-btn bg-white text-gray-700 hover:bg-gray-100 border border-gray-300 px-3 py-1 rounded-full text-xs font-bold transition-all">Patagonia 🇦🇷</button>
+                <button onclick="showWeather('guatemala', this)" class="w-btn bg-white text-gray-700 hover:bg-gray-100 border border-gray-300 px-3 py-1 rounded-full text-xs font-bold transition-all">Gwatemala 🇬🇹</button>
+                <button onclick="showWeather('sansalvador', this)" class="w-btn bg-white text-gray-700 hover:bg-gray-100 border border-gray-300 px-3 py-1 rounded-full text-xs font-bold transition-all">Salwador 🇸🇻</button>
+                <button onclick="showWeather('sanjose', this)" class="w-btn bg-white text-gray-700 hover:bg-gray-100 border border-gray-300 px-3 py-1 rounded-full text-xs font-bold transition-all">Kostaryka 🇨🇷</button>
+                <button onclick="showWeather('panama', this)" class="w-btn bg-white text-gray-700 hover:bg-gray-100 border border-gray-300 px-3 py-1 rounded-full text-xs font-bold transition-all">Panama 🇵🇦</button>
+            </div>
+
+            <div id="weather-lapaz" class="weather-panel block">
+                <a class="weatherwidget-io" href="https://forecast7.com/es/n16d49n68d12/la-paz/" data-label_1="LA PAZ" data-label_2="Boliwia" data-theme="pure">LA PAZ Boliwia</a>
+            </div>
+            <div id="weather-ushuaia" class="weather-panel hidden">
+                <a class="weatherwidget-io" href="https://forecast7.com/es/S54d80S68d30/ushuaia/" data-label_1="USHUAIA" data-label_2="Patagonia" data-theme="pure">USHUAIA Patagonia</a>
+            </div>
+            <div id="weather-guatemala" class="weather-panel hidden">
+                <a class="weatherwidget-io" href="https://forecast7.com/es/14d63n90d53/guatemala-city/" data-label_1="GWATEMALA" data-label_2="Pogoda" data-theme="pure">GWATEMALA Pogoda</a>
+            </div>
+            <div id="weather-sansalvador" class="weather-panel hidden">
+                <a class="weatherwidget-io" href="https://forecast7.com/es/13d70n89d20/san-salvador/" data-label_1="SAN SALVADOR" data-label_2="Salwador" data-theme="pure">SAN SALVADOR Salwador</a>
+            </div>
+            <div id="weather-sanjose" class="weather-panel hidden">
+                <a class="weatherwidget-io" href="https://forecast7.com/es/9d93n84d10/san-jose/" data-label_1="SAN JOSÉ" data-label_2="Kostaryka" data-theme="pure">SAN JOSÉ Kostaryka</a>
+            </div>
+            <div id="weather-panama" class="weather-panel hidden">
+                <a class="weatherwidget-io" href="https://forecast7.com/es/8d98n79d52/panama-city/" data-label_1="PANAMA" data-label_2="Pogoda" data-theme="pure">PANAMA Pogoda</a>
+            </div>
+
             <script>
             !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
             </script>
@@ -99,7 +132,7 @@
                     <script src="https://cdn.jsdelivr.net/npm/publicalbum@latest/embed-ui.min.js" async></script>
                     <div class="pa-gallery-player-widget" style="width:100%; height:480px; display:none;"
                     data-link="https://photos.app.goo.gl/WJwjU89UaP3BE91r9"
-                    data-title="Ogolne"
+                    data-title="Ogolne · Shared album 📸"
                     data-description="Tap to view!">
                     </div>
                     </div>
@@ -186,19 +219,14 @@
         // 2. INTERAKTYWNE ZEGARY STREF CZASOWYCH
         let currentTravelTZ = 'America/La_Paz'; // Domyślnie Boliwia na start
 
-        // Funkcja wywoływana po kliknięciu w przycisk
         function changeTZ(timezone, countryName, btnElement) {
             currentTravelTZ = timezone;
             document.getElementById('travel-clock-label').innerText = `Czas u nas: ${countryName}`;
             
-            // Usunięcie klasy 'active' ze wszystkich przycisków
             const buttons = document.querySelectorAll('.tz-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
             
-            // Dodanie klasy 'active' do klikniętego przycisku
             btnElement.classList.add('active');
-            
-            // Natychmiastowa aktualizacja zegara
             updateClocks();
         }
 
@@ -206,11 +234,9 @@
             const now = new Date();
             const options = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
             
-            // Stały zegar polski
             document.getElementById('clock-poland').innerText = 
                 now.toLocaleTimeString('pl-PL', { ...options, timeZone: 'Europe/Warsaw' });
             
-            // Zmienny zegar podróżny
             try {
                 document.getElementById('clock-travel').innerText = 
                     now.toLocaleTimeString('pl-PL', { ...options, timeZone: currentTravelTZ });
@@ -220,7 +246,29 @@
         }
         setInterval(updateClocks, 1000);
         updateClocks();
+
+        // 3. INTERAKTYWNA POGODA
+        function showWeather(cityId, btnElement) {
+            // Ukryj wszystkie panele pogodowe
+            document.querySelectorAll('.weather-panel').forEach(panel => {
+                panel.classList.remove('block');
+                panel.classList.add('hidden');
+            });
+            
+            // Pokaż wybrany panel
+            document.getElementById('weather-' + cityId).classList.remove('hidden');
+            document.getElementById('weather-' + cityId).classList.add('block');
+            
+            // Zresetuj kolory wszystkich przycisków
+            document.querySelectorAll('.w-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'border-transparent');
+                btn.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+            });
+            
+            // Zaznacz kliknięty przycisk
+            btnElement.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+            btnElement.classList.add('bg-blue-600', 'text-white', 'border-transparent');
+        }
     </script>
 </body>
-</html>
-
+</html>    
