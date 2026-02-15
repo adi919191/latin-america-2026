@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Gran Aventura | 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap');
+        body { font-family: 'Montserrat', sans-serif; }
+        
+        .hero-bg {
+            /* Tło z dżunglą */
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Styl dla aktywnego przycisku strefy czasowej */
+        .tz-btn.active {
+            background-color: rgba(74, 222, 128, 0.2); /* Zielonkawy odcień */
+            border-color: #4ade80;
+            color: #4ade80;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="hero-bg min-h-screen flex flex-col justify-center items-center text-white text-center px-4 py-12">
+        <h1 class="text-5xl md:text-7xl font-extrabold mb-4 tracking-tight">¡Nuestra Gran Aventura!</h1>
+        <p class="text-xl md:text-2xl mb-10 font-light max-w-3xl">
+            Boliwia 🇧🇴 • Patagonia 🇦🇷🇨🇱 • Gwatemala 🇬🇹 • Salwador 🇸🇻 • Kostaryka 🇨🇷 • Panama 🇵🇦
+        </p>
+
+        <div class="bg-white/10 backdrop-blur-md p-8 rounded-3xl shadow-2xl border border-white/20 mb-10">
+            <h2 id="timer-title" class="text-2xl font-medium mb-4 text-yellow-400">Odliczamy do startu (Faltan):</h2>
+            <div id="timer" class="text-5xl md:text-7xl font-bold tabular-nums tracking-widest">00:00:00:00</div>
+            <div class="flex justify-between mt-3 text-xs md:text-sm uppercase tracking-widest opacity-80 px-2 md:px-6">
+                <span>Dni</span><span>Godz</span><span>Min</span><span>Sek</span>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center bg-black/50 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-white/20 w-full max-w-3xl shadow-2xl">
+            
+            <div class="flex gap-8 md:gap-16 justify-center w-full mb-6">
+                <div class="text-center">
+                    <p class="text-xs md:text-sm uppercase tracking-wider text-gray-400 mb-2">Czas w Polsce 🇵🇱</p>
+                    <div id="clock-poland" class="text-3xl md:text-5xl font-bold tabular-nums tracking-wider text-white">--:--:--</div>
+                </div>
+                
+                <div class="w-px bg-white/20"></div>
+                
+                <div class="text-center">
+                    <p id="travel-clock-label" class="text-xs md:text-sm uppercase tracking-wider text-green-400 mb-2 font-bold">Czas u nas: Boliwia 🇧🇴</p>
+                    <div id="clock-travel" class="text-3xl md:text-5xl font-bold tabular-nums tracking-wider text-green-400 transition-all duration-300">--:--:--</div>
+                </div>
+            </div>
+
+            <div class="w-full pt-4 border-t border-white/10">
+                <p class="text-xs text-gray-400 mb-3 uppercase tracking-widest">Wybierz kraj podróży:</p>
+                <div class="flex flex-wrap justify-center gap-2 md:gap-3" id="tz-buttons">
+                    <button onclick="changeTZ('America/La_Paz', 'Boliwia 🇧🇴', this)" class="tz-btn active px-4 py-2 border border-white/30 rounded-full text-xs md:text-sm hover:bg-white/10 transition-all cursor-pointer">Boliwia</button>
+                    <button onclick="changeTZ('America/Argentina/Buenos_Aires', 'Patagonia 🇦🇷', this)" class="tz-btn px-4 py-2 border border-white/30 rounded-full text-xs md:text-sm hover:bg-white/10 transition-all cursor-pointer">Patagonia</button>
+                    <button onclick="changeTZ('America/Guatemala', 'Gwatemala 🇬🇹', this)" class="tz-btn px-4 py-2 border border-white/30 rounded-full text-xs md:text-sm hover:bg-white/10 transition-all cursor-pointer">Gwatemala</button>
+                    <button onclick="changeTZ('America/El_Salvador', 'Salwador 🇸🇻', this)" class="tz-btn px-4 py-2 border border-white/30 rounded-full text-xs md:text-sm hover:bg-white/10 transition-all cursor-pointer">Salwador</button>
+                    <button onclick="changeTZ('America/Costa_Rica', 'Kostaryka 🇨🇷', this)" class="tz-btn px-4 py-2 border border-white/30 rounded-full text-xs md:text-sm hover:bg-white/10 transition-all cursor-pointer">Kostaryka</button>
+                    <button onclick="changeTZ('America/Panama', 'Panama 🇵🇦', this)" class="tz-btn px-4 py-2 border border-white/30 rounded-full text-xs md:text-sm hover:bg-white/10 transition-all cursor-pointer">Panama</button>
+                    <button onclick="changeTZ('Asia/Tokyo', 'Gdzieś dalej ✨', this)" class="tz-btn px-4 py-2 border border-white/30 rounded-full text-xs md:text-sm hover:bg-white/10 transition-all cursor-pointer">???</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="max-w-5xl mx-auto py-12 px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+            <h2 class="text-2xl font-bold mb-4">Clima Actual (Pogoda)</h2>
+            <a class="weatherwidget-io" href="https://forecast7.com/es/9d93n84d10/costa-rica/" data-label_1="KOSTARYKA" data-label_2="Pogoda na żywo" data-theme="pure" >KOSTARYKA Pogoda na żywo</a>
+            <script>
+            !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+            </script>
+        </div>
+        <div>
+            <h2 class="text-2xl font-bold mb-4">Nuestra Ruta (Nasza Trasa)</h2>
+            <div class="w-full bg-gray-200 rounded-xl overflow-hidden shadow border border-gray-300 h-48 md:h-full min-h-[250px]">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d15738830.418461973!2d-84.093452!3d9.928069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spl!2spl!4v1700000000000!5m2!1spl!2spl" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto py-12 px-4">
+        <h2 class="text-4xl font-extrabold mb-2 text-center text-gray-900">Nuestros Recuerdos</h2>
+        <p class="text-gray-500 mb-10 text-center">Wybierz album, aby zobaczyć zdjęcia z danego etapu podróży.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="bg-gray-800 text-white p-4 font-bold text-lg">📸 Ogólne</div>
+                <div class="p-4 min-h-[300px] flex items-center justify-center bg-gray-50 text-sm text-gray-400 text-center">[Wklej tutaj widżet Google Photos - Ogólne]</div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="bg-red-800 text-white p-4 font-bold text-lg">🇧🇴 Boliwia</div>
+                <div class="p-4 min-h-[300px] flex items-center justify-center bg-gray-50 text-sm text-gray-400 text-center">[Wklej tutaj widżet Google Photos - Boliwia]</div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="bg-blue-800 text-white p-4 font-bold text-lg">🇦🇷🇨🇱 Patagonia</div>
+                <div class="p-4 min-h-[300px] flex items-center justify-center bg-gray-50 text-sm text-gray-400 text-center">[Wklej tutaj widżet Google Photos - Patagonia]</div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="bg-teal-700 text-white p-4 font-bold text-lg">🇬🇹 Gwatemala</div>
+                <div class="p-4 min-h-[300px] flex items-center justify-center bg-gray-50 text-sm text-gray-400 text-center">[Wklej tutaj widżet Google Photos - Gwatemala]</div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="bg-blue-600 text-white p-4 font-bold text-lg">🇸🇻 Salwador</div>
+                <div class="p-4 min-h-[300px] flex items-center justify-center bg-gray-50 text-sm text-gray-400 text-center">[Wklej tutaj widżet Google Photos - Salwador]</div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="bg-green-700 text-white p-4 font-bold text-lg">🇨🇷 Kostaryka</div>
+                <div class="p-4 min-h-[300px] flex items-center justify-center bg-gray-50 text-sm text-gray-400 text-center">[Wklej tutaj widżet Google Photos - Kostaryka]</div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="bg-red-600 text-white p-4 font-bold text-lg">🇵🇦 Panama</div>
+                <div class="p-4 min-h-[300px] flex items-center justify-center bg-gray-50 text-sm text-gray-400 text-center">[Wklej tutaj widżet Google Photos - Panama]</div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="bg-purple-900 text-white p-4 font-bold text-lg">✨ ???</div>
+                <div class="p-4 min-h-[300px] flex items-center justify-center bg-gray-50 text-sm text-gray-400 text-center">[Wklej tutaj widżet Google Photos - Nieznane]</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-4xl mx-auto py-16 px-4">
+        <h2 class="text-3xl font-bold mb-6 text-center">Zostawcie nam wiadomość! 💌</h2>
+        <div id="disqus_thread" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"></div>
+        <script>
+            (function() { 
+            var d = document, s = d.createElement('script');
+            // WAŻNE: Podmień 'TWOJA-NAZWA-DISQUS' na swój shortname z Disqus!
+            s.src = 'https://TWOJA-NAZWA-DISQUS.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-8 text-center text-sm">
+        <p>¡Buen viaje! Stworzone na wielką wyprawę w 2026 roku.</p>
+    </footer>
+
+    <script>
+        // 1. LICZNIK WYLOTU
+        const departureDate = new Date('2026-02-28T07:20:00').getTime();
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = departureDate - now;
+            const timerElement = document.getElementById('timer');
+            const titleElement = document.getElementById('timer-title');
+            let days, hours, minutes, seconds;
+
+            if (distance > 0) {
+                days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            } else {
+                const elapsed = now - departureDate;
+                titleElement.innerText = "Jesteśmy w podróży już (Viajando por):";
+                titleElement.classList.replace('text-yellow-400', 'text-green-400');
+                days = Math.floor(elapsed / (1000 * 60 * 60 * 24));
+                hours = Math.floor((elapsed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+                seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+            }
+            const pad = (num) => String(num).padStart(2, '0');
+            timerElement.innerHTML = `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // 2. INTERAKTYWNE ZEGARY STREF CZASOWYCH
+        let currentTravelTZ = 'America/La_Paz'; // Domyślnie Boliwia na start
+
+        // Funkcja wywoływana po kliknięciu w przycisk
+        function changeTZ(timezone, countryName, btnElement) {
+            currentTravelTZ = timezone;
+            document.getElementById('travel-clock-label').innerText = `Czas u nas: ${countryName}`;
+            
+            // Usunięcie klasy 'active' ze wszystkich przycisków
+            const buttons = document.querySelectorAll('.tz-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Dodanie klasy 'active' do klikniętego przycisku
+            btnElement.classList.add('active');
+            
+            // Natychmiastowa aktualizacja zegara
+            updateClocks();
+        }
+
+        function updateClocks() {
+            const now = new Date();
+            const options = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            
+            // Stały zegar polski
+            document.getElementById('clock-poland').innerText = 
+                now.toLocaleTimeString('pl-PL', { ...options, timeZone: 'Europe/Warsaw' });
+            
+            // Zmienny zegar podróżny
+            try {
+                document.getElementById('clock-travel').innerText = 
+                    now.toLocaleTimeString('pl-PL', { ...options, timeZone: currentTravelTZ });
+            } catch (e) {
+                document.getElementById('clock-travel').innerText = "--:--:--";
+            }
+        }
+        setInterval(updateClocks, 1000);
+        updateClocks();
+    </script>
+</body>
+</html>
